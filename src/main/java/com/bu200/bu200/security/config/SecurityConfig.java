@@ -1,20 +1,34 @@
 package com.bu200.bu200.security.config;
 
+import com.bu200.bu200.security.jwt.LoginFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration  //스프링 설정 파일이다.
 @EnableWebSecurity
 public class SecurityConfig {
+    private final AuthenticationConfiguration authenticationConfiguration;
+
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration) {
+        this.authenticationConfiguration = authenticationConfiguration;
+    }
+
     @Bean   //빈이기 때문에 주입 가능하다.
     public BCryptPasswordEncoder bCryptPasswordEncoder(){   //패스워드 인코드
         return new BCryptPasswordEncoder();
+    }
+    @Bean   //매니저 생성하여 리턴하는 메서드
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
+        return configuration.getAuthenticationManager();
     }
 
     @Bean
@@ -22,7 +36,7 @@ public class SecurityConfig {
         //csrf 를 disable 하기
         http
                 .csrf(AbstractHttpConfigurer::disable);
-        //form 로그인 방식 disable
+        //form 로그인 방식 disable : JWT를 사용하기 때문에 이 부분을 커스텀해야함
         http
                 .formLogin(AbstractHttpConfigurer::disable);
         //http basic 방식 disable
@@ -36,6 +50,8 @@ public class SecurityConfig {
                         .requestMatchers("/admin").hasRole("ADMIN")             // "/admin" 경로는 ADMIN 권한이 있는지 확인함
                         .anyRequest().authenticated());     //나머지 경로는 모두 권한을 확인함
 
+        http
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration)), UsernamePasswordAuthenticationFilter.class);
         http
                 .sessionManagement((session)-> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));   //세션을 stateless 상태로 설정함

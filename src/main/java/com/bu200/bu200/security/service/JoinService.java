@@ -1,4 +1,4 @@
-package com.bu200.bu200.test.service;
+package com.bu200.bu200.security.service;
 
 import com.bu200.bu200.security.dto.JoinDTO;
 import com.bu200.bu200.security.entity.User;
