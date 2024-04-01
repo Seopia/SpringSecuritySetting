@@ -69,7 +69,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String accountRole = auth.getAuthority();
 
-        String token = jwtUtil.createJwt(accountId, accountRole, 60*60*10L);
+        String token = jwtUtil.createJwt(accountId, accountRole, 60*60*60*10L);
 
         System.out.println("유저이름은 : "+accountId+"\n"+"유저 권한은 : "+accountRole);
 

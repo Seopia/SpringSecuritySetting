@@ -1,6 +1,7 @@
 package com.bu200.bu200.security.jwt;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -30,11 +31,20 @@ public class JWTUtil {
         return getInfo(token).get("accountRole",String.class);
     }
     public Boolean isExpired(String token){
-        return getInfo(token).getExpiration().before(new Date());
+        try{
+            Boolean test = getInfo(token).getExpiration().before(new Date());
+            return test;
+        } catch (ExpiredJwtException e){
+            return true;
+        }
+
+
     }
 
     //JWT 를 발급하는 메서드이다. 추가하고 싶은 정보를 추가하자.
     public String createJwt(String username, String role, Long expiredMs){
+        System.out.println("만들어진 토큰의 시간 : "+new Date(System.currentTimeMillis()));
+        System.out.println("토큰이 만료될 시간 : "+new Date(System.currentTimeMillis() + expiredMs));
         return Jwts.builder()
                 .claim("accountId",username)
                 .claim("accountRole",role)

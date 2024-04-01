@@ -1,5 +1,6 @@
 package com.bu200.bu200.security.config;
 
+import com.bu200.bu200.security.jwt.JWTFilter;
 import com.bu200.bu200.security.jwt.JWTUtil;
 import com.bu200.bu200.security.jwt.LoginFilter;
 import org.springframework.context.annotation.Bean;
@@ -62,6 +63,9 @@ public class SecurityConfig {
         http
                 .sessionManagement((session)-> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));   //세션을 stateless 상태로 설정함
+        http
+                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
+
 
         return http.build();
     }
