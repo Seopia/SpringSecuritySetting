@@ -6,8 +6,8 @@ server:
 
 # db config
 spring:
-  profiles:
-    include: jwt
+  jwt:
+    secret: vmfhaltmskdlstkfkdgodyroqkfwkdbalroqkfwkdbalaaaaaaaaaaaaaaaabbbbb
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver         # db driver
     url: jdbc:mysql://localhost:3306/bu_200_groupware # db url
@@ -30,3 +30,7 @@ spring:
 logging:
   level:
     root: info
+
+
+
+

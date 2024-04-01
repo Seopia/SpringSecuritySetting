@@ -1,5 +1,6 @@
 package com.bu200.bu200.security.config;
 
+import com.bu200.bu200.security.jwt.JWTUtil;
 import com.bu200.bu200.security.jwt.LoginFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,9 +18,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
+    private final JWTUtil jwtUtil;
 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration) {
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil) {
         this.authenticationConfiguration = authenticationConfiguration;
+        this.jwtUtil = jwtUtil;
     }
 
     @Bean   //빈이기 때문에 주입 가능하다.
@@ -51,7 +54,11 @@ public class SecurityConfig {
                         .anyRequest().authenticated());     //나머지 경로는 모두 권한을 확인함
 
         http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration)), UsernamePasswordAuthenticationFilter.class);
+                //필터를 중간에 추가한다. LoginFilter 는 내가 만든거다.
+                //인자로 매니저를 넣어주는데 스프링에서 제공하는 설정을 넣어주면 매니저가 완성된다.
+                //매니저는 UserDetailsService 을 구현한 클래스를 찾아 그 쪽의 로직을 실행하게 된다. 그게 CustomUserDetailsService 이다.
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
+
         http
                 .sessionManagement((session)-> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));   //세션을 stateless 상태로 설정함
