@@ -1,4 +1,4 @@
-package com.bu200.bu200.security.config;
+package com.bu200.security.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

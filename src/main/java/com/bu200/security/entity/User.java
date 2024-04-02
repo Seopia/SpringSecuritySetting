@@ -1,4 +1,4 @@
-package com.bu200.bu200.security.entity;
+package com.bu200.security.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

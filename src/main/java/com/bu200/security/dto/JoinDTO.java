@@ -1,4 +1,4 @@
-package com.bu200.bu200.security.dto;
+package com.bu200.security.dto;
 
 import lombok.Getter;
 import lombok.Setter;

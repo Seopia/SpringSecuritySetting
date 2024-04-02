@@ -1,7 +1,7 @@
-package com.bu200.bu200.security.jwt;
+package com.bu200.security.jwt;
 
-import com.bu200.bu200.security.dto.CustomUserDetails;
-import com.bu200.bu200.security.entity.User;
+import com.bu200.security.dto.CustomUserDetails;
+import com.bu200.security.entity.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,10 +23,11 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        System.out.println("토큰 검사하러 왔다");
+        System.out.println("토큰 검사하러 왔다 from JWTFilter");
+        System.out.println("토큰 : "+request.getHeader("Authentication"));
         String authorization = request.getHeader("Authorization");
         if(authorization == null || !authorization.startsWith("Bearer ")){
-            System.out.println("token이 이상합니다.");
+            System.out.println("token이 없거나, Bearer가 포함되어 있지 않습니다.");
             filterChain.doFilter(request,response);
             return;
         }

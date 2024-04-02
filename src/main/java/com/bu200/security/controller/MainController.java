@@ -1,4 +1,4 @@
-package com.bu200.bu200.security.controller;
+package com.bu200.security.controller;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -14,7 +14,7 @@ public class MainController {
     @GetMapping("/")
     public String mainPage(){
         String accountId = SecurityContextHolder.getContext().getAuthentication().getName();
-        System.out.println("유저의 ID는 : "+accountId);
+        System.out.println("MainController 유저의 ID는 : "+accountId);
         return "안녕하세요 "+accountId + "님!";
     }
 }

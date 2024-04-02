@@ -1,7 +1,7 @@
-package com.bu200.bu200.security.controller;
+package com.bu200.security.controller;
 
-import com.bu200.bu200.security.dto.JoinDTO;
-import com.bu200.bu200.security.service.JoinService;
+import com.bu200.security.dto.JoinDTO;
+import com.bu200.security.service.JoinService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;

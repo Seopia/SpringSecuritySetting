@@ -1,4 +1,4 @@
-package com.bu200.bu200.security.jwt;
+package com.bu200.security.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;

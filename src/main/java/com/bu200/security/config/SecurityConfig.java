@@ -1,8 +1,8 @@
-package com.bu200.bu200.security.config;
+package com.bu200.security.config;
 
-import com.bu200.bu200.security.jwt.JWTFilter;
-import com.bu200.bu200.security.jwt.JWTUtil;
-import com.bu200.bu200.security.jwt.LoginFilter;
+import com.bu200.security.jwt.JWTFilter;
+import com.bu200.security.jwt.JWTUtil;
+import com.bu200.security.jwt.LoginFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +18,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-import java.util.Collection;
 import java.util.Collections;
 
 @Configuration  //스프링 설정 파일이다.
@@ -74,7 +73,7 @@ public class SecurityConfig {
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth)-> auth
-                        .requestMatchers("/login", "/", "/join").permitAll()   //"login", "/", "/join" 경로는 모든 권한을 허용함
+                        .requestMatchers("/login", "/", "/join", "/ws/**").permitAll()   //"login", "/", "/join" 경로는 모든 권한을 허용함
                         .requestMatchers("/admin").hasRole("ADMIN")             // "/admin" 경로는 ADMIN 권한이 있는지 확인함
                         .anyRequest().authenticated());     //나머지 경로는 모두 권한을 확인함
 

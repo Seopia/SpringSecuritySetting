@@ -1,4 +1,4 @@
-package com.bu200.bu200;
+package com.bu200;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

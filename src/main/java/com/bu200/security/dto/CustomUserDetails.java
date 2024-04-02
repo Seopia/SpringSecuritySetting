@@ -1,6 +1,6 @@
-package com.bu200.bu200.security.dto;
+package com.bu200.security.dto;
 
-import com.bu200.bu200.security.entity.User;
+import com.bu200.security.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

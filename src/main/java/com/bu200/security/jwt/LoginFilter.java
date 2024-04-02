@@ -1,8 +1,8 @@
-package com.bu200.bu200.security.jwt;
+package com.bu200.security.jwt;
 
 
 
-import com.bu200.bu200.security.dto.CustomUserDetails;
+import com.bu200.security.dto.CustomUserDetails;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

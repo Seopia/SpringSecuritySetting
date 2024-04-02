@@ -1,6 +1,6 @@
-package com.bu200.bu200.security.repository;
+package com.bu200.security.repository;
 
-import com.bu200.bu200.security.entity.User;
+import com.bu200.security.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
