@@ -5,5 +5,17 @@
 - jwt 토큰 발행
 - jwt 토큰 검증
 - CORS 설정
-
 - 웹소켓 통신 구현
+
+### 의존성
+- lombok
+- mysqlDriver
+- Spring data JPA
+- Spring security
+- Spring devtools
+- WebSocket
+- JWT 0.12.3
+
+### 테스트
+- Postman
+- React
