@@ -9,10 +9,10 @@ spring:
   jwt:
     secret: vmfhaltmskdlstkfkdgodyroqkfwkdbalroqkfwkdbalaaaaaaaaaaaaaaaabbbbb
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver         # db driver
-    url: jdbc:mysql://localhost:3306/bu_200_groupware # db url
-    username: root                                # db username
-    password: root                      # db password
+    driver-class-name: org.mariadb.jdbc.Driver         # db driver
+    url:  # db url
+    username:                           # db username
+    password:                   # db password
   devtools:
     restart:
       enabled: false # auto restart option enabled

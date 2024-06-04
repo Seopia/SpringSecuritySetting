@@ -1,7 +1,17 @@
-대학교 프로젝트 진행을 위한 Spring Security 적용 입니다.
+- 로그인 성공 = 200
+- 로그인 실패 = 401
+- 회원가입 성공 = 200
+- 회원가입 실패 = 400
+- 토큰 expire, 이상 = 401
 
-- 회원가입 로직
-- 로그인 로직
+토큰 정보 
+- accountCode
+- accountId
+- accountRole
+
+
+- 회원가입
+- 로그인
 - jwt 토큰 발행
 - jwt 토큰 검증
 - CORS 설정
@@ -10,6 +20,7 @@
 ### 의존성
 - lombok
 - mysqlDriver
+- mariaDriver
 - Spring data JPA
 - Spring security
 - Spring devtools
