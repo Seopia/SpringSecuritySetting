@@ -1,4 +1,7 @@
 
+file:
+  upload-dir: C:\uploads\profile-image
+  download-url: http://localhost:8080/uploads/
 
 # server port config
 server:
@@ -10,9 +13,9 @@ spring:
     secret: vmfhaltmskdlstkfkdgodyroqkfwkdbalroqkfwkdbalaaaaaaaaaaaaaaaabbbbb
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver         # db driver
-    url:  # db url
-    username:                           # db username
-    password:                   # db password
+    url: jdbc:mariadb://db.seopia.online:3306/flex_showcase # db url
+    username: seopia                           # db username
+    password: qwqw13245                   # db password
   devtools:
     restart:
       enabled: false # auto restart option enabled

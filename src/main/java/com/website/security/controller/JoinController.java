@@ -19,7 +19,7 @@ public class JoinController {
     }
 
     @PostMapping("/join")
-    public ResponseEntity<?> joinUser(JoinDTO joinDTO){
+    public ResponseEntity<String> joinUser(JoinDTO joinDTO){
         try {
             joinService.joinUser(joinDTO);
             return ResponseEntity.ok().body("회원가입 성공");

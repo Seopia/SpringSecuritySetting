@@ -20,45 +20,63 @@ public class JWTFilter extends OncePerRequestFilter {
         this.jwtUtil = jwtUtil;
     }
 
+    /**
+     *
+     * needAuthUrl 배열에 검사가 필요한 URL 작성
+     * 일치하면 JWT 토큰 검사 후 CustomUserDetails 생성
+     *
+     * @param path 요청 경로
+     * @return bool
+     */
+    private boolean checkUrl(String path){
+
+        String[] needAuthUrl = {"/my-page"};
+
+        for (String s : needAuthUrl) {
+            if (s.startsWith(path)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getRequestURI();
-        if ("/join".equals(path) || "/login".equals(path)) {
-            filterChain.doFilter(request, response);
-            return;
+        if(checkUrl(path)){
+            String authorization = request.getHeader("Authorization");
+            if(authorization == null || !authorization.startsWith("Bearer ")){
+                System.out.println("token이 없거나, Bearer가 포함되어 있지 않습니다.");
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"토큰이 없거나, Bearer가 포함되어 있지 않습니다.");
+                return;
+            }
+            String token = authorization.split(" ")[1];
+            if(jwtUtil.isExpired(token)){
+                System.out.println("token Expire 상태입니다.");
+                response.sendError(HttpServletResponse.SC_FORBIDDEN,"로그인이 만료되었습니다.");
+                return;
+            }
+
+            Long accountCode = jwtUtil.getUserCode(token);
+            String accountId = jwtUtil.getUsername(token);
+            String accountRole = jwtUtil.getRole(token);
+
+
+            User user = new User();
+            user.setAccountId(accountId);
+            user.setAccountRole(accountRole);
+            user.setAccountCode(accountCode);
+            CustomUserDetails customUserDetails = new CustomUserDetails(user);
+
+            Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
+
+            SecurityContextHolder.getContext().setAuthentication(authToken);
+
+            filterChain.doFilter(request,response);
+        } else {
+
+            //검사 필요한거 아니면 넘어감 단, 유저가 누군지 모름! Context Holder 사용 불가
+            filterChain.doFilter(request,response);
         }
-
-//        System.out.println("토큰 : "+request.getHeader("Authorization"));
-        String authorization = request.getHeader("Authorization");
-        if(authorization == null || !authorization.startsWith("Bearer ")){
-            System.out.println("token이 없거나, Bearer가 포함되어 있지 않습니다.");
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"잘못된 요청입니다.");
-            return;
-        }
-        String token = authorization.split(" ")[1];
-        //토큰의 소멸되었는지 검사하기
-        if(jwtUtil.isExpired(token)){
-            System.out.println("token Expire 상태입니다.");
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"로그인이 만료되었습니다.");
-            return;
-        }
-        //여기까지 오면 토큰이 정상이다.
-        //토큰에서 아이디와, 권한 획득
-        Long accountCode = jwtUtil.getUserCode(token);
-        String accountId = jwtUtil.getUsername(token);
-        String accountRole = jwtUtil.getRole(token);
-
-
-        User user = new User();
-        user.setAccountId(accountId);
-        user.setAccountRole(accountRole);
-        user.setAccountCode(accountCode);
-        CustomUserDetails customUserDetails = new CustomUserDetails(user);
-
-        Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
-
-        SecurityContextHolder.getContext().setAuthentication(authToken);
-
-        filterChain.doFilter(request,response);
     }
 }

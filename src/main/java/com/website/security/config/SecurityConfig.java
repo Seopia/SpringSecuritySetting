@@ -4,6 +4,7 @@ import com.website.security.jwt.JWTFilter;
 import com.website.security.jwt.JWTUtil;
 import com.website.security.jwt.LoginFilter;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -73,19 +74,28 @@ public class SecurityConfig {
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth)-> auth
-                        .requestMatchers("/login", "/", "/join", "/ws/**").permitAll()   //"login", "/", "/join" 경로는 모든 권한을 허용함
-                        .requestMatchers("/admin").hasRole("ADMIN")             // "/admin" 경로는 ADMIN 권한이 있는지 확인함
-                        .anyRequest().authenticated());     //나머지 경로는 모두 권한을 확인함
-
+                        .requestMatchers("/aaa","/auth","/bbb").authenticated()        //이 경로는 인가가 필요함.
+                        .requestMatchers("/admin").hasRole("ADMIN")                         //이 경로는 ADMIN 권한이 필요함
+                        .anyRequest().permitAll())                                            //나머지는 모두 허락함
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            // 인증 실패 시
+                            response.setContentType("application/json;charset=UTF-8");
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.getWriter().write("{\"error\": \"인증 실패\", \"message\": \"인증에 실패했습니다.\"}");
+                        })
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            // 권한 부족 시
+                            response.setContentType("application/json;charset=UTF-8");
+                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            response.getWriter().write("{\"error\": \"권한 부족\", \"message\": \"어드민만 접근 가능합니다.\"}");
+                        }));
         http
-                //필터를 중간에 추가한다. LoginFilter 는 내가 만든거다.
-                //인자로 매니저를 넣어주는데 스프링에서 제공하는 설정을 넣어주면 매니저가 완성된다.
-                //매니저는 UserDetailsService 을 구현한 클래스를 찾아 그 쪽의 로직을 실행하게 된다. 그게 CustomUserDetailsService 이다.
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         http
                 .sessionManagement((session)-> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));   //세션을 stateless 상태로 설정함
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http
                 .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 

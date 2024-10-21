@@ -28,7 +28,7 @@ public class JoinService {
             User data = new User();
             data.setAccountId(joinDTO.getAccountId());
             data.setAccountPassword(bCryptPasswordEncoder.encode(joinDTO.getAccountPassword()));    //비밀번호 인코딩
-            data.setAccountRole("ROLE_USER");  //모든 유저를 어드민으로
+            data.setAccountRole("ROLE_USER");
             userRepository.save(data);
         } catch (Exception e){
             throw new Exception("회원가입 중 알 수 없는 에러가 발생했습니다. : "+e.getMessage());
